@@ -8,23 +8,19 @@
 </head>
 <body>
 
-  <div class="dataCardContainer">
-    <div class="dataCard">
-    <p>Moisture:</p>
-    <p id="moistureData">---</p>
-    <p id="moistureDataPercent">---</p>
-    <p id="moistureTime">---</p>
-  </div>
-  <!--
-  <div class="dataCard">
-    <p>Moisture:</p>
-    <p id="moistureData">N/A</p>
-    <p id="moistureTime">N/A</p>
-    <p id="moistureDataPercent">---</p>
-  </div>
-  -->
+  <div id="cardGrid" class="dataCardContainer">
+    
   </div>
   
+  <template id="cardTemplate">
+    <div class="dataCard">
+      <p id="sensor-name">---</p>
+      <p id="sensor-raw">---</p>
+      <p id="sensor-value">---</p>
+      <p id="time-stamp">---</p>
+    </div>
+    
+  </template>     
   
   <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
   <script src="js/myScript.js"></script>

@@ -30,6 +30,54 @@ function getDateTime(){
     });  
 }
 
+function initHtml(sensorData){
+  var count = sensorData.length;
+  console.log(`received sensors count: ${count}`);
+
+  const cardGrid = document.getElementById('cardGrid');
+  const cardTemplate = document.getElementById('cardTemplate');
+  for (let i = 0; i < count; i++) {
+    const clone = cardTemplate.content.cloneNode(true);
+    const pTags = clone.querySelectorAll('p');
+    console.log(`tags count: ${pTags.length}`)
+
+    for (let j = 0; j < pTags.length; j++){
+      clone.getElementById(pTags[j].id).id = pTags[j].id + `-${i}`
+    }        
+
+    cardGrid.appendChild(clone);
+    document.getElementById(`sensor-name-${i}`).innerHTML = `${sensorData[i]["name"]}#${sensorData[i]["id"]}` ;
+  }         
+}
+
+function updatePage(sensorList){
+  var count = sensorList.length;
+  console.log(`received sensors count: ${count}`)
+  
+  const pTag = document.getElementById('cardTemplate').content.querySelectorAll('p');
+  console.log(`tags: ${pTag.length}`)
+
+  for(let i=0; i< sensorList.length; i++){
+    getSensorValue(i).then(response => {
+      console.log('response:' + response);
+      document.getElementById(`sensor-raw-${i}`).innerHTML = response["value"];
+      document.getElementById(`sensor-value-${i}`).innerHTML = Number.parseFloat(getInvertedPercentage(response["value"], 1600, 3650)).toFixed(2) + '%' ;
+      document.getElementById(`time-stamp-${i}`).innerHTML = response["timeStamp"];
+    });
+    
+  }
+}
+
+function listSensors(){
+  var url = baseUrl + 'listSensors/'
+  return axios.get(url)
+  .then(response => response.data)
+  .catch(error => {
+      console.error('Error fetching card count:', error);
+      return 0; // fallback value
+  });
+}
+
 function getSensorValue(sensorId){
   if(sensorId == null){
     err = "ERROR: sensor ID can't be null"
@@ -38,25 +86,31 @@ function getSensorValue(sensorId){
     return;
   }
 
-  axios({
-    url: baseUrl + 'sensor/',
+  return axios({
+    url: baseUrl + 'sensorData/',
     method: 'get',
-    headers: {'Content-type': 'text/html; charset=UTF-8'},
+    headers: {'Content-type': 'application/json; charset=UTF-8'},
     params:{
       id: sensorId
     }
   })
-    .then(function (response) {
-      document.getElementById("moistureData").innerHTML = response.data;
-      document.getElementById("moistureDataPercent").innerHTML = getInvertedPercentage(response.data, 1600, 3650);
-      console.log(response);
-    })
+    .then(response => response.data)
     .catch(function (error) {
       console.log(error);
+      return 0;
     });  
 }
+
+listSensors().then(initHtml);
+listSensors().then(updatePage);
+
+setInterval(() => {
+  listSensors().then(updatePage);
+}, 5000);
+//listSensors();
+/*
 
 setInterval(() => {
   getDateTime();
   getSensorValue(0);
-}, 5000);
+}, 5000);*/

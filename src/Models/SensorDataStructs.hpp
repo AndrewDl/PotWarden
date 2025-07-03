@@ -2,15 +2,15 @@
 
 struct SensorData {
     int Id;
-    int value;
-    String time;
+    int Value;
+    String TimeStamp;
 };
 
 enum SensorType {
-    NA,
-    VIRTUAL,
-    SOIL_CAP,
-    TEMPERATURE
+    NA = 0,
+    VIRTUAL = 1,
+    SOIL_CAP = 21,
+    TEMPERATURE = 31
 };
 
 class ISensor {
@@ -36,9 +36,9 @@ class VirtualSensor : public ISensor {
             SensorData *data = new SensorData();
             
             data->Id = this->Id;
-            data->time = UTC.dateTime();
+            data->TimeStamp = UTC.dateTime();
 
-            data->value = rand() % 256;
+            data->Value = rand() % 3600 + 1650;
 
             return data;
         }
@@ -62,9 +62,9 @@ class MoistureSensor : public ISensor {
 
             SensorData *data = new SensorData();
             data->Id = this->Id;
-            data->time = UTC.dateTime();
+            data->TimeStamp = UTC.dateTime();
 
-            data->value = analogRead(this->Pin);
+            data->Value = analogRead(this->Pin);
 
             return data;
         }

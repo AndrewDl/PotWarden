@@ -15,18 +15,28 @@ void getTime(AsyncWebServerRequest *request) {
     request->send(200, "text/plain", message);
 }
 
-void getSensor(AsyncWebServerRequest *request) {
-    String message = "Server error";    
+void getSensorData(AsyncWebServerRequest *request) {
+      
     char paramName[] = "id";
 
-    if (isValidInteger(request, paramName))
+    if (!isValidInteger(request, paramName))
     {
-        int sensorNum = request->getParam("id")->value().toInt();
-        message = data[sensorNum]->value;   
-        //message = request->getParam("id")->value();
-    }    
-    Serial.println(message);
-    request->send(200, "text/plain", message);
+        String message = "Server error"; 
+        request->send(500, "text/plain", message);
+        
+        return;
+    }
+
+    int sensorNum = request->getParam("id")->value().toInt();
+    
+    JsonDocument jsonDoc;   
+    jsonDoc["id"] = data[sensorNum]->Id;   
+    jsonDoc["value"] = data[sensorNum]->Value;   
+    jsonDoc["timeStamp"] = data[sensorNum]->TimeStamp;  
+
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    serializeJson(jsonDoc, *response);
+    request->send(response);
 }
 
 void listSensors(AsyncWebServerRequest *request) {

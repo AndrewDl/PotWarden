@@ -33,7 +33,7 @@ void InitServer()
 
     server.on("/health", HTTP_GET, healthRequest);
     server.on("/time", HTTP_GET, getTime);
-    server.on("/sensor", HTTP_GET, getSensor);
+    server.on("/sensorData", HTTP_GET, getSensorData);
     server.on("/listSensors", HTTP_GET, listSensors);
 
     server.onNotFound(notFound);

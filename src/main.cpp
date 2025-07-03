@@ -12,6 +12,7 @@
 ISensor *sensorArray[] = { 
     new VirtualSensor(101),
     new VirtualSensor(102),
+    new VirtualSensor(103),
     new MoistureSensor(201, A0)
   };
 
@@ -44,9 +45,9 @@ void loop() {
     Serial.print("time: ");
     Serial.print(data[i]->Id);
     Serial.print("sensor: ");
-    Serial.print(data[i]->time);
+    Serial.print(data[i]->TimeStamp);
     Serial.print("value: ");
-    Serial.println(data[i]->value);
+    Serial.println(data[i]->Value);
 
   }    
   // put your main code here, to run repeatedly:
