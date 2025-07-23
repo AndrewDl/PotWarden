@@ -69,7 +69,7 @@ function updatePage(sensorList){
 }
 
 function listSensors(){
-  var url = baseUrl + 'listSensors/'
+  var url = baseUrl + 'sensor/list/'
   return axios.get(url)
   .then(response => response.data)
   .catch(error => {
@@ -87,7 +87,7 @@ function getSensorValue(sensorId){
   }
 
   return axios({
-    url: baseUrl + 'sensorData/',
+    url: baseUrl + 'sensor/data/live/',
     method: 'get',
     headers: {'Content-type': 'application/json; charset=UTF-8'},
     params:{

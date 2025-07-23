@@ -79,10 +79,33 @@ void getDataFile(AsyncWebServerRequest *request) {
       request->send(404, "text/plain", "File not found");
       return;
     }
-    
+
     Serial.println("File found...");
 
     AsyncWebServerResponse *response = request->beginResponse(SPIFFS, fileName, "text/plain", false);  
     request->send(response);    
 }
 
+void listDataFiles(AsyncWebServerRequest *request) {
+      
+    char paramName[] = "file"; 
+
+    if (!isValidString(request, paramName))
+    {
+        String message = "Server error"; 
+        request->send(500, "text/plain", message);
+        return;
+    }
+
+    String fileName = request->getParam("file")->value();
+
+    if(!SPIFFS.exists(fileName)){
+      request->send(404, "text/plain", "File not found");
+      return;
+    }
+    
+    Serial.println("File found...");
+
+    AsyncWebServerResponse *response = request->beginResponse(SPIFFS, fileName, "text/plain", false);  
+    request->send(response);    
+}
