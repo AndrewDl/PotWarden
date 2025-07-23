@@ -25,3 +25,8 @@ bool isValidInteger(AsyncWebServerRequest *request, char *paramName)
     
     return true;
 }
+
+bool isValidString(AsyncWebServerRequest *request, char *paramName)
+{
+    return !paramIsNull(request, paramName);
+}

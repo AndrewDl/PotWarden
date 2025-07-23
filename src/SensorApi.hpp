@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ArduinoJson.h>
+#include <SPIFFS.h>
 
 #include "ApiTools.hpp"
 #include "Models/SensorDataStructs.hpp"
@@ -60,3 +61,28 @@ void listSensors(AsyncWebServerRequest *request) {
     
     request->send(response);
 }
+
+void getDataFile(AsyncWebServerRequest *request) {
+      
+    char paramName[] = "file"; 
+
+    if (!isValidString(request, paramName))
+    {
+        String message = "Server error"; 
+        request->send(500, "text/plain", message);
+        return;
+    }
+
+    String fileName = request->getParam("file")->value();
+
+    if(!SPIFFS.exists(fileName)){
+      request->send(404, "text/plain", "File not found");
+      return;
+    }
+    
+    Serial.println("File found...");
+
+    AsyncWebServerResponse *response = request->beginResponse(SPIFFS, fileName, "text/plain", false);  
+    request->send(response);    
+}
+

@@ -44,6 +44,28 @@ class VirtualSensor : public ISensor {
         }
 };
 
+class InternalTempSensor : public ISensor {
+    public:
+        InternalTempSensor(int Id){
+            this->Id = Id;
+            this->Type = TEMPERATURE;
+            this->Name = "InternalTempSensor";
+        }
+
+        SensorData* Read() {  // Method/function defined inside the class
+            srand(UTC.second());
+        
+            SensorData *data = new SensorData();
+            
+            data->Id = this->Id;
+            data->TimeStamp = UTC.dateTime();
+
+            data->Value = temperatureRead();
+
+            return data;
+        }
+};
+
 class MoistureSensor : public ISensor {
     public:
         int Pin;
@@ -69,21 +91,3 @@ class MoistureSensor : public ISensor {
             return data;
         }
 };
-/*
-class SensorArray {
-    private:
-        int count = 0;
-
-    public:   
-        void AddItem(ISensor item)
-        {
-            this->count++;
-            return nullptr;
-        };
-
-        ISensor* GetItem(int index)
-        {
-            return nullptr;
-        };
-};
-*/

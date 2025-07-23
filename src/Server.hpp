@@ -35,6 +35,7 @@ void InitServer()
     server.on("/time", HTTP_GET, getTime);
     server.on("/sensorData", HTTP_GET, getSensorData);
     server.on("/listSensors", HTTP_GET, listSensors);
+    server.on("/dataFile", HTTP_GET, getDataFile);
 
     server.onNotFound(notFound);
 

@@ -12,8 +12,8 @@
 ISensor *sensorArray[] = { 
     new VirtualSensor(101),
     new VirtualSensor(102),
-    new VirtualSensor(103),
-    new MoistureSensor(201, A0)
+    new MoistureSensor(201, A0),
+    new InternalTempSensor(301),
   };
 
 int sensorArraySize = sensorArraySize = sizeof(sensorArray)/sizeof(sensorArray[0]);
@@ -52,7 +52,7 @@ void loop() {
   }    
   // put your main code here, to run repeatedly:
   // Serial.println("UTC: " + UTC.dateTime());
-  
+    
   digitalWrite(PCB_LED, HIGH);
   delay(2000);
   digitalWrite(PCB_LED, LOW);
