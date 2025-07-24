@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <ezTime.h>
 
+#include "TimeIntervals.h"
+
 #include "myWiFi.hpp"
 #include "Server.hpp"
 //config file
@@ -25,6 +27,8 @@ int sensorArraySize = sensorArraySize = sizeof(sensorArray)/sizeof(sensorArray[0
 SensorData **data = new SensorData*[sensorArraySize];
 
 // put function declarations here:  
+void GatherSensorData();
+
 void setup() {
   // put your setup code here, to run once:
   setDebug(INFO);
@@ -41,28 +45,43 @@ void setup() {
   InitServer();  
   waitForSync();
 
+  // Init sensors
   for (int i = 0; i < sensorArraySize; i++){
     sensorArray[i]->Init();
-  }    
+    data[i] = sensorArray[i]->Read();
+  } 
 }
 
+unsigned long ledMillis = 0;
+unsigned long sensorMillis = 0;
+bool ledState = LOW;
+
 void loop() {
+  unsigned long currentMillis = millis();
+  
+  if (currentMillis - ledMillis >= INTERVAL_STATUS_LED) {
+    ledMillis = currentMillis;  // Remember the time
+
+    ledState = !ledState;            // Toggle the LED state
+    digitalWrite(PCB_LED, ledState);
+  }
+
+  if (currentMillis - sensorMillis >= INTERVAL_READ_SENSORS) {
+    sensorMillis = currentMillis;
+
+    GatherSensorData();
+  }  
+}
+
+void GatherSensorData(){
   for (int i = 0; i < sensorArraySize; i++){
     data[i] = sensorArray[i]->Read();
 
-    Serial.print("time: ");
-    Serial.print(data[i]->Id);
-    Serial.print("sensor: ");
+    Serial.print("| time: ");
     Serial.print(data[i]->TimeStamp);
-    Serial.print("value: ");
+    Serial.print(" | sensor id: ");
+    Serial.print(data[i]->Id);
+    Serial.print(" | value: ");
     Serial.println(data[i]->Value);
-
-  }    
-  // put your main code here, to run repeatedly:
-  // Serial.println("UTC: " + UTC.dateTime());
-    
-  digitalWrite(PCB_LED, HIGH);
-  delay(2000);
-  digitalWrite(PCB_LED, LOW);
-  delay(2000);
+  } 
 }

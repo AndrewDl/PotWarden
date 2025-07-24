@@ -9,8 +9,7 @@ class VirtualSensor : public ISensor {
         }
 
         void Init() override {
-            delay(1000);
-            srand(UTC.second());
+            srand(millis());
         }
         
         SensorData* Read() override {  // Method/function defined inside the class
