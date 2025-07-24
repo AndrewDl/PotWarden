@@ -7,6 +7,8 @@
 //Apis
 #include "SensorApi.hpp"
 
+#include "Models/Sensors/ISensor.hpp"
+
 AsyncWebServer server(80);
 
 int *model;

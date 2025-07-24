@@ -7,13 +7,17 @@
 #include "config.h"
 #include "BoardEsp32c3.h"
 
-#include "Models/SensorDataStructs.hpp"
+#include "Models/Sensors/ISensor.hpp"
+#include "Models/Sensors/MoistureSensor.hpp"
+#include "Models/Sensors/TemperatureSensor.hpp"
+#include "Models/Sensors/InternalTemperatureSensor.hpp"
+#include "Models/Sensors/VirtualSensor.hpp"
 
 ISensor *sensorArray[] = { 
-    new VirtualSensor(101),
-    new VirtualSensor(102),
     new MoistureSensor(201, A0),
     new InternalTempSensor(301),
+    new TemperatureSensor(302, A1),
+    new VirtualSensor(101),
   };
 
 int sensorArraySize = sensorArraySize = sizeof(sensorArray)/sizeof(sensorArray[0]);
@@ -36,6 +40,10 @@ void setup() {
   InitWiFi(ssid, wifi_pass);  
   InitServer();  
   waitForSync();
+
+  for (int i = 0; i < sensorArraySize; i++){
+    sensorArray[i]->Init();
+  }    
 }
 
 void loop() {

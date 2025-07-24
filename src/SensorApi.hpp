@@ -4,7 +4,8 @@
 #include <SPIFFS.h>
 
 #include "ApiTools.hpp"
-#include "Models/SensorDataStructs.hpp"
+
+#include "Models/Sensors/ISensor.hpp"
 
 extern ISensor *sensorArray[];
 extern int sensorArraySize;
