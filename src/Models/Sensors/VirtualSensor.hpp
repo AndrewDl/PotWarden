@@ -17,7 +17,7 @@ class VirtualSensor : public ISensor {
             SensorData *data = new SensorData();
             
             data->Id = this->Id;
-            data->TimeStamp = UTC.dateTime();
+            data->TimeStamp = UTC.dateTime(DATETIME_FORMAT_DEFAULT);
 
             data->Value = rand() % 3600 + 1650;
 

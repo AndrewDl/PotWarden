@@ -1,8 +1,6 @@
 #include <Arduino.h>
 #include <ezTime.h>
 
-#include "TimeIntervals.h"
-
 #include "myWiFi.hpp"
 #include "Server.hpp"
 //config file
@@ -27,8 +25,8 @@ int sensorArraySize = sensorArraySize = sizeof(sensorArray)/sizeof(sensorArray[0
 SensorData **data = new SensorData*[sensorArraySize];
 
 // put function declarations here:  
+void LogSensorData();
 void GatherSensorData();
-
 void setup() {
   // put your setup code here, to run once:
   setDebug(INFO);
@@ -48,8 +46,9 @@ void setup() {
   // Init sensors
   for (int i = 0; i < sensorArraySize; i++){
     sensorArray[i]->Init();
-    data[i] = sensorArray[i]->Read();
   } 
+
+  GatherSensorData();
 }
 
 unsigned long ledMillis = 0;
@@ -83,5 +82,35 @@ void GatherSensorData(){
     Serial.print(data[i]->Id);
     Serial.print(" | value: ");
     Serial.println(data[i]->Value);
+  } 
+
+  LogSensorData();
+}
+
+void LogSensorData(){
+  for (int i = 0; i < sensorArraySize; i++){
+    data[i] = sensorArray[i]->Read();
+    
+    String dataRow = data[i]->TimeStamp + ";" + data[i]->Value;
+    String fileDate = UTC.dateTime(DATETIME_FORMAT_DATEONLY);
+    String fileName = READINGS_DIR + fileDate + "_" + data[i]->Id + ".csv";
+    
+    Serial.print("Opening file: ");
+    Serial.println(fileName);
+
+    #ifdef ENABLE_READINGS_LOGGING
+      File file = SPIFFS.open(fileName, FILE_APPEND);
+      file.println(dataRow);
+    #endif
+    
+    Serial.print("Appended data row: ");
+    Serial.println(dataRow);
+
+    #ifdef ENABLE_READINGS_LOGGING
+      file.close();
+    #endif
+
+    Serial.print("File closed: ");
+    Serial.println(fileName);
   } 
 }
