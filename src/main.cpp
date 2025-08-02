@@ -1,17 +1,18 @@
 #include <Arduino.h>
 #include <ezTime.h>
 
-#include "myWiFi.hpp"
-#include "Server.hpp"
+#include "Utils/myWiFi.hpp"
+#include "Utils/Server.hpp"
 //config file
-#include "config.h"
-#include "BoardEsp32c3.h"
+#include "config/config.h"
+#include "config/boardEsp32c3.h"
 
 #include "Models/Sensors/ISensor.hpp"
 #include "Models/Sensors/MoistureSensor.hpp"
 #include "Models/Sensors/TemperatureSensor.hpp"
 #include "Models/Sensors/InternalTemperatureSensor.hpp"
 #include "Models/Sensors/VirtualSensor.hpp"
+#include "Models/SensorDataStructs.hpp"
 
 ISensor *sensorArray[] = { 
     new MoistureSensor(201, A0),
@@ -47,6 +48,8 @@ void setup() {
   for (int i = 0; i < sensorArraySize; i++){
     sensorArray[i]->Init();
   } 
+
+  Serial.println("Sensors initialized.");
 
   GatherSensorData();
 }
@@ -84,7 +87,9 @@ void GatherSensorData(){
     Serial.println(data[i]->Value);
   } 
 
-  LogSensorData();
+  #ifdef ENABLE_READINGS_LOGGING
+    LogSensorData();
+  #endif
 }
 
 void LogSensorData(){

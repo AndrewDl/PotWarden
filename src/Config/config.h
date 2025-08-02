@@ -1,11 +1,11 @@
 #pragma once
-#include "config_secrets.h"
+#include "config/config_secrets.h"
 
 #define WEB_SERVER_NAME "pot-warden"
 
 //=====SPIFFS DATA LOGGING SECTION=====
 //define for writing data to spiffs, not only writing to console
-#define ENABLE_READINGS_LOGGING
+//#define ENABLE_READINGS_LOGGING
 #define READINGS_DIR "/reading/"
 
 //=====TIME CONTROL SECTION=====

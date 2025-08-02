@@ -1,5 +1,6 @@
 #pragma once
 
+ #include <map>
 struct SensorData {
     int Id;
     int Value;
@@ -11,4 +12,48 @@ enum SensorType {
     VIRTUAL = 1,
     SOIL_CAP = 21,
     TEMPERATURE = 31
+};
+
+  /* class SensorMap that implements map data structure
+  where the key is the sensor id, represented as int value and the value is a SensorData object 
+  with functions that allow to:
+  -add pair of id and sensor data object
+  -remove pair by id
+  -get sensor data by id
+  -update and sensor data object by id
+  */
+class SensorMap {
+  private:
+    std::map<int, SensorData*> sensorMap;
+
+  public:
+    // Add a pair of id and SensorData pointer
+    void add(int id, SensorData* data) {
+      sensorMap[id] = data;
+    }
+
+    // Remove pair by id
+    void remove(int id) {
+      auto it = sensorMap.find(id);
+      if (it != sensorMap.end()) {
+        sensorMap.erase(it);
+      }
+    }
+
+    // Get SensorData pointer by id
+    SensorData* get(int id) {
+      auto it = sensorMap.find(id);
+      if (it != sensorMap.end()) {
+        return it->second;
+      }
+      return nullptr;
+    }
+
+    // Update SensorData pointer by id
+    void update(int id, SensorData* data) {
+      auto it = sensorMap.find(id);
+      if (it != sensorMap.end()) {
+        it->second = data;
+      }
+    }
 };
