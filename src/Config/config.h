@@ -5,8 +5,8 @@
 
 //=====SPIFFS DATA LOGGING SECTION=====
 //define for writing data to spiffs, not only writing to console
-//#define ENABLE_READINGS_LOGGING
-#define READINGS_DIR "/reading/"
+#define ENABLE_READINGS_LOGGING
+#define READINGS_DIR "/readings"
 
 //=====TIME CONTROL SECTION=====
 #define INTERVAL_SECOND   1000

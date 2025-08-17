@@ -4,6 +4,7 @@
 #include <SPIFFS.h>
 
 #include "Api/ApiTools.hpp"
+#include "Utils/FileSystem.hpp"
 
 #include "Models/Sensors/ISensor.hpp"
 
@@ -66,6 +67,8 @@ void listSensors(AsyncWebServerRequest *request) {
 void getDataFile(AsyncWebServerRequest *request) {
       
     char paramName[] = "file"; 
+    bool requestedAsFile = false;
+
 
     if (!isValidString(request, paramName))
     {
@@ -74,39 +77,45 @@ void getDataFile(AsyncWebServerRequest *request) {
         return;
     }
 
-    String fileName = request->getParam("file")->value();
-
-    if(!SPIFFS.exists(fileName)){
+    if (request->hasParam("download")) {
+        requestedAsFile = request->getParam("download")->value() == "true";
+    }
+    
+    String fileName = READINGS_DIR + request->getParam("file")->value();
+    
+    Serial.println("File requested: " + fileName);
+    Serial.println("File exists: " + String(SPIFFS.exists(fileName)));
+    
+    if(!FileSystem::Exists(fileName)){
       request->send(404, "text/plain", "File not found");
       return;
     }
-
     Serial.println("File found...");
 
-    AsyncWebServerResponse *response = request->beginResponse(SPIFFS, fileName, "text/plain", false);  
+    AsyncWebServerResponse *response = request->beginResponse(SPIFFS, fileName, "text/plain", requestedAsFile);  
     request->send(response);    
 }
 
 void listDataFiles(AsyncWebServerRequest *request) {
-      
-    char paramName[] = "file"; 
+    // Lists all files in the "readings" directory using FileSystem
+    // @param request Pointer to the AsyncWebServerRequest
+    // @return Sends a JSON response with a "files" array or error message
 
-    if (!isValidString(request, paramName))
-    {
-        String message = "Server error"; 
-        request->send(500, "text/plain", message);
+    Serial.println("Retrieveing files...");
+
+    std::vector<String> filesVec = FileSystem::List(READINGS_DIR);
+    if (filesVec.empty()) {
+        request->send(404, "application/json", "{\"error\":\"No files found\"}");
         return;
     }
 
-    String fileName = request->getParam("file")->value();
-
-    if(!SPIFFS.exists(fileName)){
-      request->send(404, "text/plain", "File not found");
-      return;
+    JsonDocument jsonDoc;
+    JsonArray filesArray = jsonDoc["files"].to<JsonArray>();
+    for (const auto& file : filesVec) {
+        filesArray.add(file);
     }
-    
-    Serial.println("File found...");
 
-    AsyncWebServerResponse *response = request->beginResponse(SPIFFS, fileName, "text/plain", false);  
-    request->send(response);    
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    serializeJson(jsonDoc, *response);
+    request->send(response);
 }

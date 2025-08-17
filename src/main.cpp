@@ -98,24 +98,17 @@ void LogSensorData(){
     
     String dataRow = data[i]->TimeStamp + ";" + data[i]->Value;
     String fileDate = UTC.dateTime(DATETIME_FORMAT_DATEONLY);
-    String fileName = READINGS_DIR + fileDate + "_" + data[i]->Id + ".csv";
-    
+    String fileName = fileDate + "_" + data[i]->Id + ".csv";
+    String fullFileName = String(READINGS_DIR) + "/" + fileName;
+
     Serial.print("Opening file: ");
-    Serial.println(fileName);
+    Serial.println(fullFileName);
 
     #ifdef ENABLE_READINGS_LOGGING
-      File file = SPIFFS.open(fileName, FILE_APPEND);
-      file.println(dataRow);
+      FileSystem::Append(fullFileName, dataRow);
     #endif
     
     Serial.print("Appended data row: ");
     Serial.println(dataRow);
-
-    #ifdef ENABLE_READINGS_LOGGING
-      file.close();
-    #endif
-
-    Serial.print("File closed: ");
-    Serial.println(fileName);
   } 
 }

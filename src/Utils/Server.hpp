@@ -11,7 +11,6 @@
 
 AsyncWebServer server(80);
 
-int *model;
 ISensor **mySensorArrayModel;
 
 void healthRequest(AsyncWebServerRequest *request) {
@@ -29,6 +28,12 @@ void InitServer()
     DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "*");
 
     SPIFFS.begin();
+    if (!MDNS.begin(WEB_SERVER_NAME)) {
+        Serial.println("Error setting up MDNS responder!");
+        return;
+    }
+
+    server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
     MDNS.begin(WEB_SERVER_NAME);
 
     server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
@@ -36,10 +41,9 @@ void InitServer()
     server.on("/health", HTTP_GET, healthRequest);
     server.on("/time", HTTP_GET, getTime);
     server.on("/sensor/data/live", HTTP_GET, getSensorData);
-    server.on("/sensor/data/file", HTTP_GET, getDataFile);
+    server.on("/sensor/data/file", HTTP_GET, getDataFile);    
+    server.on("/sensor/data/list", HTTP_GET, listDataFiles);
     server.on("/sensor/list", HTTP_GET, listSensors);
-    server.on("/sensor/list/files", HTTP_GET, listDataFiles);
-    
 
     server.onNotFound(notFound);
 
