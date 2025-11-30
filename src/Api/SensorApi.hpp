@@ -81,7 +81,7 @@ void getDataFile(AsyncWebServerRequest *request) {
         requestedAsFile = request->getParam("download")->value() == "true";
     }
     
-    String fileName = READINGS_DIR + request->getParam("file")->value();
+    String fileName = (String)READINGS_DIR + (String)"/" + request->getParam("file")->value();
     
     Serial.println("File requested: " + fileName);
     Serial.println("File exists: " + String(SPIFFS.exists(fileName)));

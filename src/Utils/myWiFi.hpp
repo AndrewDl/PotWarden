@@ -11,4 +11,5 @@ void InitWiFi(char *ssid, char *password)
         delay(1000);
         Serial.print(".");
     }
+    Serial.println("Local IP: " + WiFi.localIP());
 }
