@@ -56,6 +56,6 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp"
     },
-    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.errorSquiggles": "enabled",
     "github.copilot.chat.codeGeneration.useInstructionFiles": true,
 }
