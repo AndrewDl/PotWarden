@@ -15,3 +15,27 @@ int Add(int a, int b) {
     return a + b;
 }
 ```
+when looking for solutions for problems, consired the technology stack used in the project and prefer standard library functions and well-known libraries over custom implementations.
+technology stack includes:
+
+Backend:
+- C++17
+- PlatformIO
+- Arduino framework
+- ESPAsyncWebServer library for handling HTTP requests
+- ArduinoJson library for JSON parsing and serialization
+Frontend:
+- html, css, javascript
+Hardware:
+- ESP32 microcontroller family
+- Common sensors and actuators used with ESP32 and Arduino
+
+Project structure:
+- src/: source code files
+- src/Api/: API related code
+- src/Drivers/: Hardware drivers
+- src/Utils/: Utility functions and helpers
+- data/: Files to be uploaded to the device filesystem (SPIFFS/LittleFS)
+- data/css/: CSS files for web interface
+- data/js/: JavaScript files for web interface
+- data/html/: HTML files for web interface
