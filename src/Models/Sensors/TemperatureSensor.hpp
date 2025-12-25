@@ -34,6 +34,7 @@ class TemperatureSensor : public ISensor {
             data->Id = this->Id;
             data->TimeStamp = UTC.dateTime(DATETIME_FORMAT_DEFAULT);
             
+            this->sensors.requestTemperatures();
             data->Value = this->sensors.getTempCByIndex(0);
 
             return data;
