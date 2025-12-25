@@ -6,6 +6,7 @@
 
 //Apis
 #include "Api/SensorApi.hpp"
+#include "Api/ActionsApi.hpp"
 
 #include "Models/Sensors/ISensor.hpp"
 
@@ -24,7 +25,7 @@ void notFound(AsyncWebServerRequest *request) {
 void InitServer()
 { 
     DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
-    DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "GET, PUT");
+    DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "GET, PUT, POST");
     DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "*");
 
     SPIFFS.begin();
@@ -37,6 +38,14 @@ void InitServer()
     MDNS.begin(WEB_SERVER_NAME);
 
     server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
+    
+    server.on(
+        "/*", HTTP_OPTIONS,
+        [](AsyncWebServerRequest *request){
+            AsyncWebServerResponse *response = request->beginResponse(204);
+            request->send(response);
+        }
+    );
 
     server.on("/health", HTTP_GET, healthRequest);
     server.on("/time", HTTP_GET, getTime);
@@ -44,6 +53,7 @@ void InitServer()
     server.on("/sensor/data/file", HTTP_GET, getDataFile);    
     server.on("/sensor/data/list", HTTP_GET, listDataFiles);
     server.on("/sensor/list", HTTP_GET, listSensors);
+    server.on("/action/pour", HTTP_POST, [](AsyncWebServerRequest * request){}, NULL, actionPour);
 
     server.onNotFound(notFound);
 

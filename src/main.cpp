@@ -6,13 +6,16 @@
 //config file
 #include "config/config.h"
 #include "config/boardEsp32c3.h"
-
+//sensors
 #include "Models/Sensors/ISensor.hpp"
 #include "Models/Sensors/MoistureSensor.hpp"
 #include "Models/Sensors/TemperatureSensor.hpp"
 #include "Models/Sensors/InternalTemperatureSensor.hpp"
 #include "Models/Sensors/VirtualSensor.hpp"
 #include "Models/SensorDataStructs.hpp"
+//actuators
+#include "Models/Actuators/IActuator.hpp"
+#include "Models/Actuators/Pump.hpp"
 
 ISensor *sensorArray[] = { 
     new MoistureSensor(201, A0),
@@ -21,7 +24,12 @@ ISensor *sensorArray[] = {
     new VirtualSensor(101),
   };
 
-int sensorArraySize = sensorArraySize = sizeof(sensorArray)/sizeof(sensorArray[0]);
+IActuator *actuatorArray[] = { 
+    new Pump(GPIO10),
+  };
+
+int sensorArraySize = sizeof(sensorArray)/sizeof(sensorArray[0]);
+int actuatorArraySize = sizeof(actuatorArray)/sizeof(actuatorArray[0]);
 
 SensorData **data = new SensorData*[sensorArraySize];
 
@@ -41,17 +49,23 @@ void setup() {
   char ssid[] = WIFI_SSID;
   char wifi_pass[] = WIFI_PASSWORD;
   InitWiFi(ssid, wifi_pass);  
-  InitServer();  
   waitForSync();
-
+  
   // Init sensors
   for (int i = 0; i < sensorArraySize; i++){
     sensorArray[i]->Init();
   } 
+  // Init actuators
+  for (int i = 0; i < actuatorArraySize; i++){
+    actuatorArray[i]->Init();
+  }
 
   Serial.println("Sensors initialized.");
 
   GatherSensorData();
+
+  delay(1000);
+  InitServer();  
 }
 
 unsigned long ledMillis = 0;
