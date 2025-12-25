@@ -101,6 +101,38 @@ function getSensorValue(sensorId){
     });  
 }
 
+// Sends pour action to REST API
+function sendPourAction(deviceId, actionName, value) {
+  
+  const url = baseUrl + 'action/pour';
+  const data = {
+    deviceId: deviceId,
+    actionName: actionName,
+    value: value * 1000 // Convert seconds to milliseconds
+  };
+  console.log('Pour action:', data);
+  axios.post(url, data)
+    .then(response => {
+      console.log('Pour action sent:', response.data);
+    })
+    .catch(error => {
+      console.error('Error sending pour action:', error);
+      
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const button = document.getElementById('control-button');
+  const input = document.getElementById('control-input');
+  button.addEventListener('click', function() {
+    // Example values, replace with your logic to get deviceId and actionName
+    const deviceId = 'device1';
+    const actionName = 'pour';
+    const value = input.value;
+    sendPourAction(deviceId, actionName, value);
+  });
+});
+
 listSensors().then(initHtml);
 listSensors().then(updatePage);
 

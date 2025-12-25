@@ -12,6 +12,15 @@
     
   </div>
   
+  <div id="cardGrid" class="controlCardContainer">
+    <div class="controlCard">
+      <p id="input-label">Manual action</p>
+      <input id="control-input" type="text" value="2" />
+      <label id="control-label" for="control-input">(Sec)</label>
+      <button id="control-button">Pour</button>
+    </div>
+  </div>
+
   <template id="cardTemplate">
     <div class="dataCard">
       <p id="sensor-name">---</p>
@@ -21,7 +30,7 @@
     </div>
     
   </template>     
-  
+    
   <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
   <script src="js/myScript.js"></script>
   
