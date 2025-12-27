@@ -73,11 +73,13 @@ void setup() {
 unsigned long ledMillis = 0;
 unsigned long sensorMillis = 0;
 unsigned long actionMillis = 0;
+unsigned long sensorDataMillis = 0;
 bool ledState = LOW;
 
 void loop() {
   unsigned long currentMillis = millis();
   
+  //Status LED blinking section
   if (currentMillis - ledMillis >= INTERVAL_STATUS_LED) {
     ledMillis = currentMillis;  // Remember the time
 
@@ -85,21 +87,37 @@ void loop() {
     digitalWrite(PCB_LED, ledState);
   }
 
+  //Sensor reading section
   if (currentMillis - sensorMillis >= INTERVAL_READ_SENSORS) {
     sensorMillis = currentMillis;
 
     GatherSensorData();
+
+    //Auto pour if conditions are met
+    #ifdef ENABLE_AUTO_POUR
     if (data[0]->Value >= MOISTURE_THRESHOLD_DRY) {
       actuatorArray[0]->SetAction(AUTO_POUR_DURATION); //set pump to run for 20 seconds
       Serial.println("Warning: Soil moisture is very low!");
     }
-  }  
+    #endif
+  }
 
+  //Actions execution section
+  #ifdef ENABLE_ACTIONS_EXECUTION
   if (currentMillis - actionMillis >= INTERVAL_CHECK_ACTIONS) {
     actionMillis = currentMillis;
 
     ExecuteActions();
   }
+  #endif
+
+  //Sensor data logging section
+  #ifdef ENABLE_READINGS_LOGGING
+  if (currentMillis - sensorDataMillis >= INTERVAL_LOG_SENSOR_DATA) {
+    sensorDataMillis = currentMillis;
+    LogSensorData();
+  }
+  #endif
 }
 
 void GatherSensorData(){
@@ -113,10 +131,6 @@ void GatherSensorData(){
     Serial.print(" | value: ");
     Serial.println(data[i]->Value);
   } 
-
-  #ifdef ENABLE_READINGS_LOGGING
-    LogSensorData();
-  #endif
 }
 
 void ExecuteActions(){
