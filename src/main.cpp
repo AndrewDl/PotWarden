@@ -21,7 +21,7 @@ ISensor *sensorArray[] = {
     new MoistureSensor(201, A0),
     new InternalTempSensor(301),
     new TemperatureSensor(302, A1),
-    new VirtualSensor(101),
+    //new VirtualSensor(101),
   };
 
 IActuator *actuatorArray[] = { 
@@ -36,6 +36,8 @@ SensorData **data = new SensorData*[sensorArraySize];
 // put function declarations here:  
 void LogSensorData();
 void GatherSensorData();
+void ExecuteActions();
+
 void setup() {
   // put your setup code here, to run once:
   setDebug(INFO);
@@ -70,6 +72,7 @@ void setup() {
 
 unsigned long ledMillis = 0;
 unsigned long sensorMillis = 0;
+unsigned long actionMillis = 0;
 bool ledState = LOW;
 
 void loop() {
@@ -86,7 +89,17 @@ void loop() {
     sensorMillis = currentMillis;
 
     GatherSensorData();
+    if (data[0]->Value >= MOISTURE_THRESHOLD_DRY) {
+      actuatorArray[0]->SetAction(AUTO_POUR_DURATION); //set pump to run for 20 seconds
+      Serial.println("Warning: Soil moisture is very low!");
+    }
   }  
+
+  if (currentMillis - actionMillis >= INTERVAL_CHECK_ACTIONS) {
+    actionMillis = currentMillis;
+
+    ExecuteActions();
+  }
 }
 
 void GatherSensorData(){
@@ -104,6 +117,12 @@ void GatherSensorData(){
   #ifdef ENABLE_READINGS_LOGGING
     LogSensorData();
   #endif
+}
+
+void ExecuteActions(){
+  for (int i = 0; i < actuatorArraySize; i++){
+    actuatorArray[i]->RunAction(millis());
+  }
 }
 
 void LogSensorData(){

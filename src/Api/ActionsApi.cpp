@@ -47,7 +47,7 @@ void actionPour(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_
         return;
     }
 
-    actuatorArray[0]->Act(requestData.value);
+    actuatorArray[0]->SetAction(requestData.value);
     request->send(200, "text/plain", "Pour action executed");
 }
 

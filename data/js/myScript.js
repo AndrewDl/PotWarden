@@ -1,4 +1,5 @@
 //let baseUrl = "http://pot-warden/"
+//let baseUrl = "http://192.168.0.22/"
 let baseUrl = ""
 
 function getPercentage(value, min, max) {
