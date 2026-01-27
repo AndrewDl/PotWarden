@@ -4,7 +4,7 @@
 #   .\download_readings.ps1 -BaseUrl 'http://pot-warden' -OutputDir 'C:\Temp\readings'
 
 param(
-  [string]$BaseUrl = 'http://pot-warden',
+  [string]$BaseUrl = 'http://192.168.0.22',
   [string]$OutputDir = "$PSScriptRoot\..\temp\readings"
 )
 
