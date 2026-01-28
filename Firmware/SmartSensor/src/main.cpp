@@ -19,7 +19,16 @@
 // II - Device id.
 // 00 - RESERVED
 
-#define LED_PIN PB4
+// Defines for AtTinyX5 family
+#ifdef ARDUINO_AVR_ATTINYX5
+  #define LED_PIN PB4
+#endif
+
+// Defines for AtTiny 402 family
+#ifdef ARDUINO_attinyxy2
+  #define LED_PIN 4
+#endif
+
 #define DEVICE_ID 0x08
 #define DEVICE_I2C_ADDR DEVICE_ID
 
