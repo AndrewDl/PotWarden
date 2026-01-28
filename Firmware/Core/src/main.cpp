@@ -18,10 +18,10 @@
 #include "Models/Actuators/Pump.hpp"
 
 ISensor *sensorArray[] = { 
-    new MoistureSensor(201, A0),
+    //new MoistureSensor(201, A0),
     new InternalTempSensor(301),
-    new TemperatureSensor(302, A1),
-    //new VirtualSensor(101),
+    //new TemperatureSensor(302, A1),
+    new VirtualSensor(101),
   };
 
 IActuator *actuatorArray[] = { 
