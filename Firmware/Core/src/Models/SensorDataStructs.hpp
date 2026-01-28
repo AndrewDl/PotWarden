@@ -1,6 +1,8 @@
 #pragma once
 
- #include <map>
+#include <map>
+#include <Arduino.h>
+
 struct SensorData {
     int Id;
     int Value;
