@@ -4,7 +4,8 @@
 			"path": "Core"
 		},
 		{
-			"path": "Sensor"
+			"name": "SmartSensor",
+			"path": "SmartSensor"
 		}
 	],
 	"settings": {
