@@ -1,5 +1,7 @@
 #pragma once
 
+/// @brief Sensor that generates virtual sensor data used as stub for testing
+/// Implements the ISensor interface
 class VirtualSensor : public ISensor {
     public:
         VirtualSensor(int Id){

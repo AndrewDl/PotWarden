@@ -3,6 +3,9 @@
 
 #pragma once
 
+/// @brief Sensor that reads soil temperature using a 
+/// Dallas OneWire temperature sensor
+/// Implements the ISensor interface
 class TemperatureSensor : public ISensor {
 
     private:

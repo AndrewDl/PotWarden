@@ -1,5 +1,8 @@
 #pragma once
 
+/// @brief Sensor that reads soil moisture using a 
+/// capacitive moisture sensor v2
+/// Implements the ISensor interface
 class MoistureSensor : public ISensor {
     public:
         int Pin;

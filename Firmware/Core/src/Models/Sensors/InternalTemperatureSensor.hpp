@@ -1,5 +1,7 @@
 #pragma once
 
+/// @brief Sensor that reads the internal temperature of the ESP32
+/// Implements the ISensor interface
 class InternalTempSensor : public ISensor {
     public:
         InternalTempSensor(int Id){
