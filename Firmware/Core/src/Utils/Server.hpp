@@ -29,14 +29,15 @@ void InitServer()
     DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "*");
 
     SPIFFS.begin();
+    
+    #ifdef WEB_SERVER_NAME
     if (!MDNS.begin(WEB_SERVER_NAME)) {
         Serial.println("Error setting up MDNS responder!");
         return;
     }
-
-    server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
-    MDNS.begin(WEB_SERVER_NAME);
-
+    Serial.println("mDNS responder started");
+    #endif
+    
     server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
     
     server.on(

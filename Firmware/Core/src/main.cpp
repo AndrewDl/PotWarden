@@ -3,6 +3,7 @@
 
 #include "Utils/myWiFi.hpp"
 #include "Utils/Server.hpp"
+#include "Utils/FileSystem.hpp"
 //config file
 #include "config.h"
 #include "boardEsp32c3.h"
@@ -17,12 +18,22 @@
 #include "Models/Actuators/IActuator.hpp"
 #include "Models/Actuators/Pump.hpp"
 
+#ifdef ENVIRONMENT_TEST
 ISensor *sensorArray[] = { 
     //new MoistureSensor(201, A0),
     new InternalTempSensor(301),
     //new TemperatureSensor(302, A1),
     new VirtualSensor(101),
   };
+#endif
+
+#ifdef ENVIRONMENT_RELEASE
+ISensor *sensorArray[] = { 
+    new MoistureSensor(201, A0),
+    new InternalTempSensor(301),
+    new TemperatureSensor(302, A1),
+  };
+#endif
 
 IActuator *actuatorArray[] = { 
     new Pump(GPIO10),

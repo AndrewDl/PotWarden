@@ -1,7 +1,7 @@
 #pragma once
 #include "config_secrets.h"
 
-#define WEB_SERVER_NAME "pot-warden"
+#define WEB_SERVER_NAME "pot-warden-test"
 
 //=====SPIFFS DATA LOGGING SECTION=====
 //define for writing data to spiffs, not only writing to console
