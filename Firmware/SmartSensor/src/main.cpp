@@ -12,11 +12,17 @@
 //Response Data packet structure:
 //||    Byte 0  |    Byte 1  |    Byte 2  |   Byte 3   |   Byte 4   ||
 //||  HEADER H  |  HEADER L  |  CHECKSUM  |   Value H  |   Value L  ||
-//||--IIII0000--|--0000SSBB--|--XXXXXXXX--|--HHHHHHHH--|--LLLLLLLL--||
+//||--IIIIIIII--|--SSS000BB--|--XXXXXXXX--|--HHHHHHHH--|--LLLLLLLL--||
 // XX : Checksum. XOR of bytes 3,1,0
 // BB - ADC Bits. 00: None, 01: 10bits; 10:12bits; 11:16bits
-// SS - SensorType Type. 000: none, 001: LDR
-// II - Device id.
+// SS - SensorType Type. 
+//      000: none, 
+//      001: MOISTURE, 
+//      010: HUMIDITY, 
+//      011: SOIL TEMPERATURE, 
+//      100: AIR TEMPERATURE
+//
+// II - Device Signature.
 // 00 - RESERVED
 
 // Defines for AtTinyX5 family
@@ -29,8 +35,8 @@
   #define LED_PIN 4
 #endif
 
-#define DEVICE_ID 0x08
-#define DEVICE_I2C_ADDR DEVICE_ID
+#define DEVICE_ID 0x5A //Device Signature typical for PotWarden I2C Sensor controllers
+#define DEVICE_I2C_ADDR 0x08
 
 #define CMD_REQUEST_DATA 0x10
 #define CMD_SET_ACTION   0x20
