@@ -1,5 +1,5 @@
 #pragma once
-#include "config/config_secrets.h"
+#include "config_secrets.h"
 
 #define WEB_SERVER_NAME "pot-warden"
 

@@ -2,7 +2,7 @@
 #include <ESPAsyncWebServer.h>
 #include <ESPmDNS.h>
 #include <SPIFFS.h>
-#include "config/config.h"
+#include <config.h>
 
 //Apis
 #include "Api/SensorApi.hpp"

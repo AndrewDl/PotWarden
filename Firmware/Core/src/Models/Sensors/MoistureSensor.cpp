@@ -2,7 +2,7 @@
 
 #include <MoistureSensor.hpp>
 #include <ezTime.h>
-#include "Config/config.h"
+#include <config.h>
 
 // Constructor
 // @param Id Sensor ID

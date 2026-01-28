@@ -4,8 +4,8 @@
 #include "Utils/myWiFi.hpp"
 #include "Utils/Server.hpp"
 //config file
-#include "config/config.h"
-#include "config/boardEsp32c3.h"
+#include <config.h>
+#include <boardEsp32c3.h>
 //sensors
 #include "Models/Sensors/ISensor.hpp"
 #include "Models/Sensors/MoistureSensor.hpp"
