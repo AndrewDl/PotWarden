@@ -13,6 +13,7 @@
 #include "Models/Sensors/TemperatureSensor.hpp"
 #include "Models/Sensors/InternalTemperatureSensor.hpp"
 #include "Models/Sensors/VirtualSensor.hpp"
+#include "Models/Sensors/SmartSensor.hpp"
 #include "Models/SensorDataStructs.hpp"
 //actuators
 #include "Models/Actuators/IActuator.hpp"
@@ -24,6 +25,7 @@ ISensor *sensorArray[] = {
     new InternalTempSensor(301),
     //new TemperatureSensor(302, A1),
     new VirtualSensor(101),
+    new SmartSensor(501, 0x08, 9, 10),
   };
 #endif
 

@@ -13,7 +13,11 @@ enum SensorType {
     NA = 0,
     VIRTUAL = 1,
     SOIL_CAP = 21,
-    TEMPERATURE = 31
+    TEMPERATURE = 31,
+    SMART_SOIL_MOISTURE = 0xF1,
+    SMART_AIR_HUMIDITY = 0xF2,
+    SMART_SOIL_TEMPERATURE = 0xF3,
+    SMART_AIR_TEMPERATURE = 0xF4
 };
 
   /* class SensorMap that implements map data structure

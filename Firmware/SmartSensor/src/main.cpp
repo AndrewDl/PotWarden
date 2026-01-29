@@ -69,8 +69,8 @@ void loop() {
 // function that executes whenever data is requested by master
 // this function is registered as an event, see setup()
 void requestEvent() {
-  Wire.write(uint8_t(sensorValue & 0xFF));
-  Wire.write(uint8_t((sensorValue >> 8) & 0xFF));
+  uint8_t* responseBuffer = packResponseData(sensorValue);
+  Wire.write(responseBuffer, 5);
 }
 
 // function that executes whenever data is received from master
@@ -88,11 +88,13 @@ void receiveEvent(int howMany) {
 
 uint8_t* packResponseData(unsigned int value) {
   uint8_t* buffer = new uint8_t[5];
-  buffer[0] = (DEVICE_ID << 4) | 0x0; //Device ID and reserved bits
-  buffer[1] = 0x00 | (SENSOR_TYPE_MOISTURE << 2) | ADC_BITS_10; //Sensor Type and ADC bits
-  buffer[2] = buffer[0] ^ buffer[1] ^ (value & 0xFF) ^ ((value >> 8) & 0xFF); //Checksum
+  buffer[0] = (DEVICE_ID); //Device ID and reserved bits
+  buffer[1] = (SENSOR_TYPE_MOISTURE << 5) | ADC_BITS_10; //Sensor Type and ADC bits
+  
   buffer[3] = (value >> 8) & 0xFF; //Value High byte
   buffer[4] = value & 0xFF;        //Value Low byte
+
+  buffer[2] = buffer[0] ^ buffer[1] ^  buffer[3] ^  buffer[4]; //Checksum
   return buffer;
 }
 
